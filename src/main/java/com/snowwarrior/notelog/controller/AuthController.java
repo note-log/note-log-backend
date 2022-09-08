@@ -4,6 +4,7 @@ import com.snowwarrior.notelog.auth.JwtUser;
 import com.snowwarrior.notelog.dto.Response;
 import com.snowwarrior.notelog.dto.UserLoginDTO;
 import com.snowwarrior.notelog.service.AuthService;
+import com.snowwarrior.notelog.util.ResponseEntityHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -35,11 +36,9 @@ public class AuthController {
             HttpHeaders httpHeaders = new HttpHeaders();
 
             httpHeaders.set("Authorization", "Bearer " + jwtUser.getToken());
-            var map = new HashMap<String, String>();
-            map.put("token", jwtUser.getToken());
-            return new ResponseEntity<>(new Response<>(1, "login success", map), httpHeaders, HttpStatus.OK);
+            return ResponseEntityHelper.ok("login success", "token", jwtUser.getToken(), httpHeaders);
         } catch (BadCredentialsException e) {
-            return new ResponseEntity<>(new Response<>(-1, e.getMessage(), new HashMap<>()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new Response<>(-1, e.getMessage(), new HashMap<>()), HttpStatus.UNAUTHORIZED);
         }
     }
 }
