@@ -43,4 +43,9 @@ public class LogService {
         logs.sort((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt()));
         return logs;
     }
+
+    public List<Log> filterLog() {
+        List<Log> logs = new ArrayList<>();
+        return logs;
+    }
 }

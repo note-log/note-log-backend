@@ -4,6 +4,7 @@ import com.snowwarrior.notelog.model.Log;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -18,6 +19,14 @@ public interface LogMapper {
     @ResultMap("logResultMap")
     @Select("select * from log where note_id = #{noteId}")
     List<Log> getLogByNoteId(Long noteId);
+
+    @ResultMap("logResultMap")
+    @Select("select * from log where note_id = #{noteId} and location = #{location}")
+    List<Log> getLogByNoteIdAndLocation(Long noteId, String location);
+
+    @ResultMap("logResultMap")
+    @Select("select * from log where note_id = #{noteId} and created_at between #{startTime} and #{endTime}")
+    List<Log> getLogByNoteIdAndTime(Long noteId, Date startTime, Date endTime);
 
     @Insert("insert into log (note_id, content, location, created_at) " +
             "values " +
