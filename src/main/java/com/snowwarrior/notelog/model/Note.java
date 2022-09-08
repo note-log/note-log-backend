@@ -1,11 +1,18 @@
 package com.snowwarrior.notelog.model;
 
+import com.snowwarrior.notelog.dto.NoteDTO;
+import com.snowwarrior.notelog.dto.UpdateNoteDTO;
+import com.snowwarrior.notelog.dto.UserRegisterDTO;
+import org.springframework.beans.BeanUtils;
+
 import java.util.Date;
 
 public class Note {
     private Long id;
     private Long userId;
     private String content;
+    private Date deleteAt;
+    private Long latestTag;
 
     public Long getId() {
         return id;
@@ -47,6 +54,11 @@ public class Note {
         this.latestTag = latestTag;
     }
 
-    private Date deleteAt;
-    private Long latestTag;
+    public void fromNoteDTO(NoteDTO dto) {
+        BeanUtils.copyProperties(dto, this);
+    }
+
+    public void fromUpdateNoteDTO(UpdateNoteDTO dto) {
+        BeanUtils.copyProperties(dto, this);
+    }
 }

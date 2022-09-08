@@ -136,5 +136,23 @@ public class GlobalExceptionHandler implements ProblemHandling {
                 .build();
         return create(ex, problem, request);
     }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<Problem> handleInvalidOperationException(NotFoundException ex, NativeWebRequest request) {
+        Problem problem = Problem.builder()
+                .withStatus(Status.BAD_REQUEST)
+                .with("message", ex.getMessage())
+                .build();
+        return create(ex, problem, request);
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<Problem> handleInvalidOperationException(UnauthorizedException ex, NativeWebRequest request) {
+        Problem problem = Problem.builder()
+                .withStatus(Status.BAD_REQUEST)
+                .with("message", ex.getMessage())
+                .build();
+        return create(ex, problem, request);
+    }
 }
 

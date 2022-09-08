@@ -22,6 +22,9 @@ public interface UserMapper {
     @Select("select * from user where id=#{id}")
     Optional<User> getUserById(Long id);
 
+    @Select("select id from user where username=#{username}")
+    Optional<Long> getUserIdByUsername(String username);
+
     @Insert("insert into user(" +
             "username,password,phone,email" +
             ")" +
