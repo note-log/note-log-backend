@@ -76,7 +76,8 @@ public class NoteService {
 
         var newNote = oldNote.get();
         if (newNote.getDeleteAt() != null) throw new IllegalStateException("note has been deleted.");
-        if (!Objects.equals(newNote.getUserId(), userId)) throw new UnauthorizedException("no privilege to update this note.");
+        if (!Objects.equals(newNote.getUserId(), userId))
+            throw new UnauthorizedException("no privilege to update this note.");
         ObjectHelper.copyNoNullProperties(note, newNote);
         var log = new Log();
         log.setNoteId(newNote.getId());
@@ -89,6 +90,7 @@ public class NoteService {
     }
 
     public void deleteNote(Long noteId) {
+        if (noteId == null) throw new IllegalStateException("note id can't be null.");
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<Long> userIdOptional = userMapper.getUserIdByUsername(username);
         if (userIdOptional.isEmpty()) {
@@ -100,6 +102,7 @@ public class NoteService {
             throw new NotFoundException("can't find this note");
         }
         var note = noteOptional.get();
+        if (note.getDeleteAt() != null) throw new IllegalStateException("note has been deleted.");
         if (!Objects.equals(note.getUserId(), userId)) {
             throw new UnauthorizedException("no privilege to delete this note.");
         }

@@ -30,7 +30,7 @@ public class NoteController {
         try {
             List<Note> notes = noteService.getNote();
             List<NoteDTO> noteDTOS = new ArrayList<>();
-            for (var note: notes) noteDTOS.add(note.convertToNoteDTO());
+            for (var note : notes) noteDTOS.add(note.convertToNoteDTO());
             return ResponseEntityHelper.ok("success", "notes", noteDTOS);
         } catch (Exception e) {
             return ResponseEntityHelper.fail(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -58,6 +58,16 @@ public class NoteController {
             return ResponseEntityHelper.ok("success");
         } catch (Exception e) {
             return ResponseEntityHelper.fail(e.getMessage(), HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE);
+        }
+    }
+
+    @DeleteMapping("")
+    public ResponseEntity<Response<Integer>> deleteNote(@RequestBody @Valid NoteDTO noteDTO) {
+        try {
+            noteService.deleteNote(noteDTO.getId());
+            return ResponseEntityHelper.ok("success");
+        } catch (Exception e) {
+            return ResponseEntityHelper.fail(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 }

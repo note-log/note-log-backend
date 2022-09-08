@@ -19,7 +19,7 @@ public interface NoteMapper {
     Optional<Note> getNoteById(Long id);
 
     @ResultMap("noteResultMap")
-    @Select("select * from note where user_id=#{userId}")
+    @Select("select * from note where user_id=#{userId} and delete_at is null")
     List<Note> getNoteByUserId(Long userId);
 
     @Insert("insert into note(" +
@@ -35,7 +35,7 @@ public interface NoteMapper {
             "where id=#{id}")
     void updateNoteById(Note note);
 
-    @Delete("update note set deleted_at = now() where id = #{id}")
+    @Delete("update note set delete_at = now() where id = #{id}")
     void deleteNoteById(Long id);
 
     @Delete("delete from note where user_id=#{userId}")
