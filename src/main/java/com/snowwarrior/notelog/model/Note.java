@@ -1,8 +1,6 @@
 package com.snowwarrior.notelog.model;
 
 import com.snowwarrior.notelog.dto.NoteDTO;
-import com.snowwarrior.notelog.dto.UpdateNoteDTO;
-import com.snowwarrior.notelog.dto.UserRegisterDTO;
 import org.springframework.beans.BeanUtils;
 
 import java.util.Date;
@@ -58,7 +56,9 @@ public class Note {
         BeanUtils.copyProperties(dto, this);
     }
 
-    public void fromUpdateNoteDTO(UpdateNoteDTO dto) {
-        BeanUtils.copyProperties(dto, this);
+    public NoteDTO convertToNoteDTO() {
+        var dto = new NoteDTO();
+        BeanUtils.copyProperties(this, dto);
+        return dto;
     }
 }

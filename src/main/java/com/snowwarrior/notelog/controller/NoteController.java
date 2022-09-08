@@ -2,7 +2,6 @@ package com.snowwarrior.notelog.controller;
 
 import com.snowwarrior.notelog.dto.NoteDTO;
 import com.snowwarrior.notelog.dto.Response;
-import com.snowwarrior.notelog.dto.UpdateNoteDTO;
 import com.snowwarrior.notelog.model.Note;
 import com.snowwarrior.notelog.service.NoteService;
 import com.snowwarrior.notelog.util.ResponseEntityHelper;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -26,10 +26,12 @@ public class NoteController {
     }
 
     @GetMapping("")
-    public ResponseEntity<Response<List<Note>>> getNote() {
+    public ResponseEntity<Response<List<NoteDTO>>> getNote() {
         try {
             List<Note> notes = noteService.getNote();
-            return ResponseEntityHelper.ok("success", "notes", notes);
+            List<NoteDTO> noteDTOS = new ArrayList<>();
+            for (var note: notes) noteDTOS.add(note.convertToNoteDTO());
+            return ResponseEntityHelper.ok("success", "notes", noteDTOS);
         } catch (Exception e) {
             return ResponseEntityHelper.fail(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -48,9 +50,9 @@ public class NoteController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Response<Integer>> updateNote(@RequestBody @Valid UpdateNoteDTO noteDTO) {
+    public ResponseEntity<Response<Integer>> updateNote(@RequestBody @Valid NoteDTO noteDTO) {
         var note = new Note();
-        note.fromUpdateNoteDTO(noteDTO);
+        note.fromNoteDTO(noteDTO);
         try {
             noteService.updateNote(note, noteDTO.getLocation());
             return ResponseEntityHelper.ok("success");
