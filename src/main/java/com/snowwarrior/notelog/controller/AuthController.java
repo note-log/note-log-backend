@@ -38,7 +38,7 @@ public class AuthController {
             httpHeaders.set("Authorization", "Bearer " + jwtUser.getToken());
             return ResponseEntityHelper.ok("login success", "token", jwtUser.getToken(), httpHeaders);
         } catch (BadCredentialsException e) {
-            return new ResponseEntity<>(new Response<>(-1, e.getMessage(), new HashMap<>()), HttpStatus.UNAUTHORIZED);
+            return ResponseEntityHelper.fail(e.getMessage(), HttpStatus.UNAUTHORIZED);
         }
     }
 }

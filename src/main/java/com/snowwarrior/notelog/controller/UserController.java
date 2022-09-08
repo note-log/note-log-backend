@@ -35,7 +35,7 @@ public class UserController {
             userService.register(userRegister);
             return ResponseEntityHelper.ok("registration success");
         } catch (Exception e) {
-            return new ResponseEntity<>(new Response<>(-1, e.getMessage(), new HashMap<>()), HttpStatus.NOT_ACCEPTABLE);
+            return ResponseEntityHelper.fail(e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
         }
 
     }
