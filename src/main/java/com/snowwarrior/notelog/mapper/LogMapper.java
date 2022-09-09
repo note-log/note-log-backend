@@ -28,6 +28,10 @@ public interface LogMapper {
     @Select("select * from log where note_id = #{noteId} and created_at between #{startTime} and #{endTime}")
     List<Log> getLogByNoteIdAndTime(Long noteId, Date startTime, Date endTime);
 
+    @ResultMap("logResultMap")
+    @Select("select * from log where note_id = #{noteId} and location = #{location} and created_at between #{startTime} and #{endTime}")
+    List<Log> getLogByNoteIdAndTimeAndLocation(Long noteId, String location, Date startTime, Date endTime);
+
     @Insert("insert into log (note_id, content, location, created_at) " +
             "values " +
             "(#{noteId}, #{content}, #{location}, #{createdAt})")

@@ -1,5 +1,6 @@
 package com.snowwarrior.notelog.service;
 
+import com.snowwarrior.notelog.dto.FilterDTO;
 import com.snowwarrior.notelog.mapper.LogMapper;
 import com.snowwarrior.notelog.mapper.NoteMapper;
 import com.snowwarrior.notelog.mapper.UserMapper;
@@ -37,15 +38,38 @@ public class LogService {
         var notes = noteMapper.getNoteByUserId(userId);
         List<Log> logs = new ArrayList<>();
         for (var note : notes) {
-            var per_note_logs = logMapper.getLogByNoteId(note.getId());
-            logs.addAll(per_note_logs);
+            var perNoteLogs = logMapper.getLogByNoteId(note.getId());
+            logs.addAll(perNoteLogs);
         }
         logs.sort((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt()));
         return logs;
     }
 
-    public List<Log> filterLog() {
+    public List<Log> filterLog(FilterDTO dto) {
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<Long> userIdOptional = userMapper.getUserIdByUsername(username);
+        if (userIdOptional.isEmpty()) {
+            throw new UsernameNotFoundException("can't get your note.");
+        }
+        Long userId = userIdOptional.get();
+        var notes = noteMapper.getNoteByUserId(userId);
         List<Log> logs = new ArrayList<>();
+        for (var note: notes) {
+            if (dto.getLocation() != null && dto.getStartTime() != null) {
+                var perNoteLogs = logMapper.getLogByNoteIdAndTimeAndLocation(note.getId(), dto.getLocation(), dto.getStartTime(), dto.getEndTime());
+                logs.addAll(perNoteLogs);
+            } else if (dto.getStartTime() != null) {
+                var perNoteLogs = logMapper.getLogByNoteIdAndTime(note.getId(), dto.getStartTime(), dto.getEndTime());
+                logs.addAll(perNoteLogs);
+            } else if (dto.getLocation() != null) {
+                var perNoteLogs = logMapper.getLogByNoteIdAndLocation(note.getId(), dto.getLocation());
+                logs.addAll(perNoteLogs);
+            } else {
+                var perNoteLogs = logMapper.getLogByNoteId(note.getId());
+                logs.addAll(perNoteLogs);
+            }
+        }
+        logs.sort((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt()));
         return logs;
     }
 }
