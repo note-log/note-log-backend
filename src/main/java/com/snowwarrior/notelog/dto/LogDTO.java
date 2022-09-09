@@ -1,10 +1,12 @@
 package com.snowwarrior.notelog.dto;
 
+import javax.validation.constraints.NotNull;
 import javax.xml.crypto.Data;
 
 public class LogDTO {
     private Long id;
 
+    @NotNull
     private Long noteId;
 
     private String location;

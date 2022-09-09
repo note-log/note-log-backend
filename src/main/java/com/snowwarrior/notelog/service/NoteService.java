@@ -57,6 +57,7 @@ public class NoteService {
         noteMapper.addNote(note);
         log.setCreatedAt(Date.from(Instant.now()));
         log.setContent(note.getContent());
+        log.setLocation(location);
         log.setNoteId(note.getId());
         logMapper.insertLog(log);
         note.setLatestTag(log.getId());

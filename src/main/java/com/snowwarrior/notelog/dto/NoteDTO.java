@@ -1,9 +1,15 @@
 package com.snowwarrior.notelog.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
+
 public class NoteDTO {
     private Long id;
+    @NotBlank
     private String content;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String location;
 
     public Long getId() {
