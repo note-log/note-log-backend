@@ -64,6 +64,6 @@ public class UserService {
 
 
     public String hello() {
-        return "Hello World";
+        return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

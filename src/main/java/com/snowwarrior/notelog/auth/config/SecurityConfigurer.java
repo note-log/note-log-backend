@@ -53,7 +53,6 @@ public class SecurityConfigurer {
                 .antMatchers("/").permitAll()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers("/app/**/*.{js,html}").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/user/hello").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/user/register").permitAll()
                 .anyRequest().authenticated()

@@ -25,8 +25,8 @@ public class UserController {
     }
 
     @GetMapping("/hello")
-    public ResponseEntity<Response<Integer>> hello() {
-        return ResponseEntityHelper.ok(userService.hello());
+    public ResponseEntity<Response<String>> hello() {
+        return ResponseEntityHelper.ok("success", "username", userService.hello());
     }
 
     @PostMapping("/register")
