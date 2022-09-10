@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 
+import static com.snowwarrior.notelog.constant.Exception.UNAUTHORIZED;
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -38,7 +40,7 @@ public class AuthController {
             httpHeaders.set("Authorization", "Bearer " + jwtUser.getToken());
             return ResponseEntityHelper.ok("login success", "token", jwtUser.getToken(), httpHeaders);
         } catch (BadCredentialsException e) {
-            return ResponseEntityHelper.fail(e.getMessage(), HttpStatus.UNAUTHORIZED);
+            return ResponseEntityHelper.fail(e.getMessage(), HttpStatus.UNAUTHORIZED, UNAUTHORIZED);
         }
     }
 }

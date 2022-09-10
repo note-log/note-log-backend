@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.HashMap;
 
+import static com.snowwarrior.notelog.constant.Exception.NOT_ACCEPTABLE;
+import static com.snowwarrior.notelog.constant.Exception.REQUEST_PROBLEM;
+
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -35,7 +38,7 @@ public class UserController {
             userService.register(userRegister);
             return ResponseEntityHelper.ok("registration success");
         } catch (Exception e) {
-            return ResponseEntityHelper.fail(e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
+            return ResponseEntityHelper.fail(e.getMessage(), HttpStatus.NOT_ACCEPTABLE, NOT_ACCEPTABLE);
         }
 
     }
@@ -46,7 +49,7 @@ public class UserController {
             var result = userService.profile();
             return ResponseEntityHelper.ok("success", "profile", result);
         } catch (Exception e) {
-            return ResponseEntityHelper.fail(e.getMessage(), HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE);
+            return ResponseEntityHelper.fail(e.getMessage(), HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE, REQUEST_PROBLEM);
         }
     }
 }

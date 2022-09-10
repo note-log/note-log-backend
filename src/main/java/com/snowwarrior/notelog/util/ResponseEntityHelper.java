@@ -28,7 +28,7 @@ public class ResponseEntityHelper {
         return new ResponseEntity<>(new Response<>(1, message, new HashMap<>()), HttpStatus.OK);
     }
 
-    public static <T> ResponseEntity<Response<T>> fail(String message, HttpStatus httpStatus) {
-        return new ResponseEntity<>(new Response<>(-1, message, new HashMap<>()), httpStatus);
+    public static <T> ResponseEntity<Response<T>> fail(String message, HttpStatus httpStatus, int status) {
+        return new ResponseEntity<>(new Response<>(status, message, new HashMap<>()), httpStatus);
     }
 }

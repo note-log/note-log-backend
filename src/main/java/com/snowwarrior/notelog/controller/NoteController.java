@@ -15,6 +15,8 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.snowwarrior.notelog.constant.Exception.*;
+
 @Controller
 @RequestMapping("/api/note")
 public class NoteController {
@@ -33,7 +35,18 @@ public class NoteController {
             for (var note : notes) noteDTOS.add(note.convertToNoteDTO());
             return ResponseEntityHelper.ok("success", "notes", noteDTOS);
         } catch (Exception e) {
-            return ResponseEntityHelper.fail(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntityHelper.fail(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, INTERVAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/detail")
+    public ResponseEntity<Response<NoteDTO>> getNoteDetail(@RequestParam @Valid Long noteId) {
+        try {
+            Note note = noteService.getNoteDetail(noteId);
+            NoteDTO dto = note.convertToNoteDTO();
+            return ResponseEntityHelper.ok("success", "note", dto);
+        } catch (Exception e) {
+            return ResponseEntityHelper.fail(e.getMessage(), HttpStatus.OK, UNAUTHORIZED);
         }
     }
 
@@ -45,7 +58,7 @@ public class NoteController {
             noteService.addNote(note, noteDTO.getLocation());
             return ResponseEntityHelper.ok("success");
         } catch (Exception e) {
-            return ResponseEntityHelper.fail(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntityHelper.fail(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, INTERVAL_SERVER_ERROR);
         }
     }
 
@@ -57,7 +70,7 @@ public class NoteController {
             noteService.updateNote(note, noteDTO.getLocation());
             return ResponseEntityHelper.ok("success");
         } catch (Exception e) {
-            return ResponseEntityHelper.fail(e.getMessage(), HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE);
+            return ResponseEntityHelper.fail(e.getMessage(), HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE, REQUEST_PROBLEM);
         }
     }
 
@@ -67,7 +80,7 @@ public class NoteController {
             noteService.deleteNote(noteDTO.getId());
             return ResponseEntityHelper.ok("success");
         } catch (Exception e) {
-            return ResponseEntityHelper.fail(e.getMessage(), HttpStatus.NOT_FOUND);
+            return ResponseEntityHelper.fail(e.getMessage(), HttpStatus.NOT_FOUND, NOT_FOUND);
         }
     }
 }

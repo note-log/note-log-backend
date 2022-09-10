@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
+import static com.snowwarrior.notelog.constant.Exception.INTERVAL_SERVER_ERROR;
+import static com.snowwarrior.notelog.constant.Exception.NOT_FOUND;
+
 @Controller
 @RequestMapping("/api/log")
 public class LogController {
@@ -30,7 +33,7 @@ public class LogController {
             var logs = logService.getLog();
             return ResponseEntityHelper.ok("success", "logs", logs);
         } catch (Exception e) {
-            return ResponseEntityHelper.fail(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntityHelper.fail(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, NOT_FOUND);
         }
     }
 
@@ -40,7 +43,7 @@ public class LogController {
             var logs = logService.filterLog(dto);
             return ResponseEntityHelper.ok("success", "logs", logs);
         } catch (Exception e) {
-            return  ResponseEntityHelper.fail(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return  ResponseEntityHelper.fail(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, INTERVAL_SERVER_ERROR);
         }
     }
 }

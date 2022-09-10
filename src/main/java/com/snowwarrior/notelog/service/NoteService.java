@@ -38,10 +38,31 @@ public class NoteService {
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<Long> userIdOptional = userMapper.getUserIdByUsername(username);
         if (userIdOptional.isEmpty()) {
-            throw new UsernameNotFoundException("can't get your note.");
+            throw new UsernameNotFoundException("can't auth your account.");
         }
         Long userId = userIdOptional.get();
-        return noteMapper.getNoteByUserId(userId);
+        var notes = noteMapper.getNoteByUserId(userId);
+        for (var note : notes) {
+            var content = note.getContent();
+            if (content.length() > 220) note.setContent(content.substring(0, 220) + "...");
+        }
+        return notes;
+    }
+
+    public Note getNoteDetail(Long noteId) {
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<Long> userIdOptional = userMapper.getUserIdByUsername(username);
+        if (userIdOptional.isEmpty()) {
+            throw new UsernameNotFoundException("can't auth your account.");
+        }
+        Long userId = userIdOptional.get();
+        var noteOptional = noteMapper.getNoteById(noteId);
+        if (noteOptional.isEmpty()) {
+            throw new NotFoundException("no note id like this.");
+        }
+        var note = noteOptional.get();
+        if (!Objects.equals(note.getUserId(), userId)) throw new UnauthorizedException("you have no privileges to see this note.");
+        return note;
     }
 
     @Transactional
